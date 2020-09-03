@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Static Template</title>
+  </head>
+  <body>
+    <ul id="todo"></ul>
+    <form>
+      <input type="text" id="inputToDo" />
+      <button id="submitBtn">Submit</button>
+    </form>
+  </body>
+  <script>
+    // CRUD
+    // Create (Add)
+    // Read (Show)
+    // Update
+    // Delete
+
+    const todoDOM = document.getElementById("todo");
+    const inputTodoDOM = document.getElementById("inputToDo");
+    const submitBtn = document.getElementById("submitBtn");
+
+    let todo = [];
+
+    let mode = "add";
+    let todoId = "";
+
+    submitBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+
+      if (mode === "add") {
+        createTodo(inputTodoDOM.value);
+      } else if (mode === "edit") {
+        editTodo(todoId, inputTodoDOM.value);
+        // Reset mode & todo ID
+        mode = "add";
+        todoId = "";
+      }
+
+      inputTodoDOM.value = "";
+    });
+
+    //  Splice intinya ngambil 2 parameter
+    // splice( ini index yg mau kita hapus , ini jumlah item yg mau di hapus )
+    // splice(1, 1) -> artinya kita mau ngehapus mulai dari index 1 sebanyak 1 item
+    // splice punya parameter ketiga, dimana kita bisa masukin data di index tertentu
+
+    // Slice ngambil 2 parameter juga
+    // Tapi dia ga nge hapus, tapi MOTONG
+    // slice( ini index mulai ngepotong, ini index sampai mana )
+    // slice(1, 5)
+
+    function setEdit(id) {
+      mode = "edit";
+      todoId = id;
+      inputTodoDOM.value = todo[id];
+    }
+
+    function editTodo(id, newTodo) {
+      todo.splice(id, 1, newTodo);
+      show();
+    }
+
+    function deleteTodo(id) {
+      // Kita bisa coba pake Splice
+      todo.splice(id, 1);
+      // Di show lagi biar todo nya update
+      show();
+    }
+
+    function createTodo(inputTodo) {
+      todo.push(inputTodo);
+      show();
+    }
+
+    function show() {
+      todoDOM.innerHTML = "";
+      for (let i = 0; i < todo.length; i++) {
+        todoDOM.innerHTML += `
+          <li>
+            ${todo[i]}
+          </li>
+          <button onclick="deleteTodo(${i})"> delete </button>
+          <button onclick="setEdit(${i})"> edit </button>`;
+      }
+    }
+  </script>
+</html>
