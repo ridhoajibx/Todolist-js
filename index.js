@@ -1,7 +1,8 @@
 const BtnAdd = document.querySelector('#btn-add'),
-      todoInput = document.querySelector('#input-todo'),
-      todoList = document.querySelector('#todo-list'),
-      data = storageTodo('todo');
+    BtnSort = document.querySelector('#btn-sort'),
+    todoInput = document.querySelector('#input-todo'),
+    todoList = document.querySelector('#todo-list'),
+    data = storageTodo('todo');
 
 let todo = data ? data : [],
     mode = "add",
@@ -9,21 +10,23 @@ let todo = data ? data : [],
 
 
 BtnAdd.addEventListener("click", addTodo);
-todoList.addEventListener("click", isComplete);
+BtnSort.addEventListener("click", sortByCompleted);
 
-if(todo.length){
+if (todo.length) {
     showTodo();
 }
 
 // show todo with lopping create element
 function showTodo() {
-   todoList.innerHTML = "";
-   for (let i = 0; i < todo.length; i++) {
-       todoList.innerHTML += `<li class="item"><span>${todo[i]}</span> 
+    todoList.innerHTML = "";
+    for (let i = 0; i < todo.length; i++) {
+        todoList.innerHTML += `<li class="item">
+                                ${todo[i].complete ? '<span class="checked">' : ''}${todo[i].text} ${todo[i].complete ? '</span>' : ''}
                                 <a class="btn-edit" onclick="editTodo(${i})">Edit</a>
                                 <a class="btn-delete" onclick="deleteTodo(${i})">Delete</a>
-                             </li>`       
-   }
+                                <a class="btn-edit" onclick="completeTodo(${i})">Complete</a>
+                             </li>`
+    }
 }
 
 // add todo and update todo with another function
@@ -31,19 +34,23 @@ function addTodo(e) {
     e.preventDefault();
     let val = todoInput.value;
 
+
     if (val === "") {
         alert("empty todo not allowed!");
     } else if (mode === "add") {
-        todo.push(val);
+        todo.push({
+            text: val,
+            complete: false
+        });
         storageTodo('todo', todo, true);
-    }else if (mode === "edit") {
+    } else if (mode === "edit") {
         editedTodo(todoId, val);
         storageTodo('todo', todo, true);
     }
 
     mode = "add";
     BtnAdd.innerHTML = "add";
-    todoId ="";
+    todoId = "";
     todoInput.value = "";
     showTodo();
     // console.log(todoInput.value);
@@ -54,14 +61,17 @@ function editTodo(i) {
     mode = "edit";
     BtnAdd.innerHTML = "edit";
     todoId = i;
-    todoInput.value = todo[i];
+    todoInput.value = todo[i].text;
     // console.log(todo[index]);
 }
 
 // execute edit todo
 function editedTodo(i, newTodo) {
-    todo.splice(i, 1, newTodo);
-    showTodo(); 
+    todo.splice(i, 1, {
+        ...todo[i],
+        text: newTodo
+    });
+    showTodo();
 }
 
 // delete todo
@@ -73,11 +83,26 @@ function deleteTodo(i) {
     showTodo();
 }
 
-// complete todo
-function isComplete(e){
-    const checked = e.target.classList.toggle('checked');
-    e.target.tagName === 'SPAN' ? checked: null;
-    console.log(e.target);
+// function to completed todo
+function completeTodo(i) {
+    if (todo[i].complete === false) {
+        if (confirm(`click okay if you've been completed todo ${todo[i].text} !`)) {
+            todo[i].complete = true;
+            storageTodo('todo', todo, true);
+        }
+    } else {
+        alert(`todo ${todo[i].text} has been completed !`)
+    }
+    showTodo();
+}
+
+// function to sort todo by completed todo
+function sortByCompleted() {
+    todo.sort(function(a, b) {
+        return (a.complete - b.complete);
+    })
+    storageTodo('todo', todo, true);
+    showTodo();
 }
 
 // get and set todo

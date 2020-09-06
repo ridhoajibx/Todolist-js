@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
-
 * {
     box-sizing: border-box;
 }
@@ -103,4 +102,9 @@ span.checked::before {
     transform: rotate(45deg);
     height: 15px;
     width: 7px;
+}
+
+.sort-todo {
+    display: flex;
+    justify-content: center;
 }
