@@ -105,7 +105,7 @@ function sortByCompleted(i) {
             return (a.complete - b.complete);
         });
     }
-    console.log();
+    console.log(todo);
     storageTodo('todo', todo, true);
     showTodo();
 }
