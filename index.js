@@ -97,10 +97,15 @@ function completeTodo(i) {
 }
 
 // function to sort todo by completed todo
-function sortByCompleted() {
-    todo.sort(function(a, b) {
-        return (a.complete - b.complete);
-    })
+function sortByCompleted(i) {
+    if (todo == "") {
+        alert("you do not have any todo to sort !")
+    } else {
+        todo.sort(function(a, b) {
+            return (a.complete - b.complete);
+        });
+    }
+    console.log();
     storageTodo('todo', todo, true);
     showTodo();
 }
