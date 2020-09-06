@@ -76,7 +76,7 @@ function editedTodo(i, newTodo) {
 
 // delete todo
 function deleteTodo(i) {
-    if (confirm(`Are you sure to delete ${todo.text}?`)) {
+    if (confirm(`Are you sure to delete ${todo[i].text}?`)) {
         todo.splice(i, 1);
         storageTodo('todo', todo, true);
     }
