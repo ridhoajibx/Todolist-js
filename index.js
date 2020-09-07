@@ -8,8 +8,9 @@ let todo = data ? data : [],
     mode = "add",
     todoId = "";
 
-
+// add event for BtnAdd to funtion addTodo
 BtnAdd.addEventListener("click", addTodo);
+// add event for BtnAdd to function Sort todo by completed
 BtnSort.addEventListener("click", sortByCompleted);
 
 if (todo.length) {
@@ -58,11 +59,15 @@ function addTodo(e) {
 
 // find index todo berfore execute
 function editTodo(i) {
-    mode = "edit";
-    BtnAdd.innerHTML = "edit";
-    todoId = i;
-    todoInput.value = todo[i].text;
-    // console.log(todo[index]);
+    if (todo[i].complete === true) {
+        alert("todo han been completed!");
+    } else {
+        mode = "edit";
+        BtnAdd.innerHTML = "edit";
+        todoId = i;
+        todoInput.value = todo[i].text;
+        console.log(todo[i]);
+    }
 }
 
 // execute edit todo
